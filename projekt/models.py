@@ -24,15 +24,17 @@ class Oferta(models.Model):
     def __str__(self):
         return self.wakat
 
-'''
-class Musician(models.Model):
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    instrument = models.CharField(max_length=100)
+class Aplikant(models.Model):
+    imie = models.CharField(max_length=100)
+    wiek = models.IntegerField()
+    wyksztalcenie = models.CharField(max_length=100)
+    pochodzenie = models.CharField(max_length=100)
 
-class Album(models.Model):
-    artist = models.ForeignKey(Musician, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    release_date = models.DateField()
-    num_stars = models.IntegerField()
+
+'''
+class Odpowiedz_Na_Aplikacje(models.Model):
+
+class Ankieta(models.Model):
+
+class CV(models.Model):
 '''

@@ -1,0 +1,23 @@
+{% extends 'projekt/base.html' %}
+
+{% block content %}
+    <div class="content_title">
+        Firmy
+    </div>
+    <table>
+        <tr>
+            <th>Imie</th>
+            <th>Wykształcenie</th>
+            <th>Pochodzenie</th>
+            <th>Wiek</th>
+        </tr>
+        {% for a in aplikant %}
+        <tr class="div_hover">
+            <td><a href="/aplikant">{{ a.imie }}</a> </td>
+            <td> {{a.wyksztalcenie }}</td>
+            <td> {{a.pochodzenie }}</td>
+            <td>{{ a.wiek }} </td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
