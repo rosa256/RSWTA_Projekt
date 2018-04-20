@@ -14,11 +14,16 @@
     <div class="page-header">
         <h1>RSWTA-Projekt</h1>
     </div>
-    <div class="menu">
-        <div class="option"><a href="{% url 'firma_list' %}">Firmy</a></div>
+
+        <ul>
+        <li><a class="active" href="/">Home</a></li>
+        <!--<div class="option"><a href="{% url 'firma_list' %}">Firmy</a></div>
         <div class="option"><a href="{% url 'oferta_list' %}">Oferty</a></div>
-        <div class="option"><a href="{% url 'aplikant_list' %}">Aplikanci</a></div>
-    </div>
+        <div class="option"><a href="{% url 'aplikant_list' %}">Aplikanci</a></div>-->
+          <li><a href="{% url 'firma_list' %}">Firmy</a></li>
+          <li><a href="{% url 'oferta_list' %}">Oferty</a></li>
+          <li><a href="{% url 'aplikant_list' %}">Aplikanci</a></li>
+        </ul>
 
     <div class="container">
 
