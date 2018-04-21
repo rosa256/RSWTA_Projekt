@@ -1,9 +1,14 @@
 {% extends 'projekt/base.html' %}
 
+
 {% block content %}
-    <div class="content_title">
-        Oferty
-    </div>
+    <div class="content">
+
+        <div class="content_title">
+        </div>
+
+        <div class="table-content">
+
     <table>
         <tr>
             <th>Wakat</th>
@@ -20,4 +25,12 @@
         </tr>
         {% endfor %}
     </table>
+
+        </div>
+    </div>
+
+    <div id="right-bar">
+        <div class="filtr" >Filtrowanie</div>
+    </div>
+
 {% endblock %}

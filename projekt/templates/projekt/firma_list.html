@@ -1,23 +1,36 @@
 {% extends 'projekt/base.html' %}
 
 {% block content %}
-    <div class="content_title">
-        Firmy
+
+    <div class="content">
+
+        <div class="content_title">
+        </div>
+
+
+        <div class="table-content">
+
+        <table>
+            <tr>
+                <th>Nazwa Firmy</th>
+                <th>Lokalizacja</th>
+                <th>Ulica</th>
+                <th>Telefon</th>
+            </tr>
+            {% for f in firma %}
+            <tr class="div_hover">
+                <td><a href="/firma">{{ f.nazwa_firmy }}</a> </td>
+                <td>{{ f.miasto }} </td>
+                <td> {{f.ulica }}</td>
+                <td>{{ f.telefon }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        </div>
     </div>
-    <table>
-        <tr>
-            <th>Nazwa Firmy</th>
-            <th>Lokalizacja</th>
-            <th>Ulica</th>
-            <th>Telefon</th>
-        </tr>
-        {% for f in firma %}
-        <tr class="div_hover">
-            <td><a href="/firma">{{ f.nazwa_firmy }}</a> </td>
-            <td>{{ f.miasto }} </td>
-            <td> {{f.ulica }}</td>
-            <td>{{ f.telefon }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+
+    <div id="right-bar">
+        <div class="filtr" >Filtrowanie</div>
+    </div>
 {% endblock %}
