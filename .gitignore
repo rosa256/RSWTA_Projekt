@@ -1,10 +1,9 @@
 *.pyc
-*~
-__pycache__
-/myvenv/*
 .idea
-/db/*.sqlite3
 *.py
-/mysite
-/static
-.DS_Store
+*.sqlite3
+*~
+.DB_Store
+*/myvenv
+__pycache__
+*/mysite
