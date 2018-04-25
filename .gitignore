@@ -1,9 +1,6 @@
 *.pyc
 .idea
-*.py
-*.sqlite3
 *~
 .DB_Store
 *myvenv
 __pycache__
-*mysite
