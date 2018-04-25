@@ -2,7 +2,7 @@
 *~
 __pycache__
 /myvenv/*
-.idea/*
+.idea
 /db/*.sqlite3
 *.py
 /mysite
