@@ -16,7 +16,7 @@
         </tr>
         {% for a in aplikant %}
         <tr class="div_hover">
-            <td><a href="/aplikant">{{ a.imie }}</a> </td>
+            <td><a href="{% url 'aplikant_detail' pk=a.pk %}">{{ a.imie }}</a> </td>
             <td> {{a.wyksztalcenie }}</td>
             <td> {{a.pochodzenie }}</td>
             <td>{{ a.wiek }} </td>

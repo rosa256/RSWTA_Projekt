@@ -21,5 +21,13 @@ def aplikant_list(request):
     aplikant = Aplikant.objects.all()
     return render(request, 'projekt/aplikant_list.html', {'aplikant': aplikant})
 
+def firma_detail(request, pk):
+    firma = get_object_or_404(Firma, pk=pk)
+    return render(request, 'projekt/firma_detail.html', {'firma': firma})
+
+def aplikant_detail(request, pk):
+    aplikant = get_object_or_404(Aplikant, pk=pk)
+    return render(request, 'projekt/aplikant_detail.html', {'aplikant': aplikant})
+
 
 # Create your views here.

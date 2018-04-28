@@ -19,7 +19,7 @@
             </tr>
             {% for f in firma %}
             <tr class="div_hover">
-                <td><a href="/firma">{{ f.nazwa_firmy }}</a> </td>
+                <td><a href="{% url 'firma_detail' pk=f.pk %}">{{ f.nazwa_firmy }}</a> </td>
                 <td>{{ f.miasto }} </td>
                 <td> {{f.ulica }}</td>
                 <td>{{ f.telefon }}</td>

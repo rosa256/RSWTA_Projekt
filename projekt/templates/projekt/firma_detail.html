@@ -1,0 +1,12 @@
+{% extends 'projekt/base.html' %}
+
+{% block content %}
+    <div class="firma_detail">
+
+        <h1>{{ firma.nazwa_firmy }}</h1>
+        <p>{{ firma.miasto|linebreaksbr }}</p>
+        <p>{{ firma.ulica|linebreaksbr }}</p>
+        <p>{{ firma.telefon|linebreaksbr }}</p>
+        <p>{{ firma.email|linebreaksbr }}</p>
+    </div>
+{% endblock %}
