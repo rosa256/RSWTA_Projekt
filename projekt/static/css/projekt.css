@@ -54,6 +54,12 @@ html {
     margin: 40px 0 20px;
     border-bottom: 1px solid #eee;
     }
+.register-success{
+    color: #026400;
+    font-family: 'Verdana';
+    padding-bottom: 9px;
+    margin: 40px 0 20px;
+    }
 
 table {
     border-collapse: collapse;
@@ -93,11 +99,13 @@ th {
     padding 10px:
     width: 50%;
 }
+.register-content{
+    text-align: center;
+    width: 40%;
+}
 
 #right-bar{
 
-    width: 13%;
-    height: 300px;
     maring-left: 45px;
     background-color: #f1f1f1;
     float:right;
@@ -106,7 +114,6 @@ th {
     border-radius: 25px;
     border: 2px solid #73AD21;
     padding: 20px;
-    height: 300px;
 
     font-size: 16px;
 }
@@ -128,13 +135,11 @@ th {
 ul {
     list-style-type: none;
     margin-right: 0;
-    width: 250px;
     background-color: #f1f1f1;
 
     border-radius: 25px;
     border: 2px solid #73AD21;
     padding: 20px;
-    height: 200px;
 
     font-size: 16px;
 }

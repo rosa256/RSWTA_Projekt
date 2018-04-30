@@ -27,11 +27,15 @@
           <li><a href="{% url 'firma_list' %}">Firmy</a></li>
           <li><a href="{% url 'oferta_list' %}">Oferty</a></li>
           <li><a href="{% url 'aplikant_list' %}">Aplikanci</a></li>
+          <li><a href="{% url 'register' %}">Rejestracja</a></li>
         </ul>
     </div>
-
+    <div class="content">
         {% block content %}
         {% endblock %}
+    </div>
+    {% include 'projekt/filter.html' %}
+
     <div style="clear:both;"></div>
 
 </div>

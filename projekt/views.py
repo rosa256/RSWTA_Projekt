@@ -1,9 +1,14 @@
-from django.shortcuts import render, get_object_or_404
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Firma, Oferta, Aplikant
 from django.utils import timezone
-from .models import Firma
-from .models import Oferta
-from .models import Aplikant
+
+from django.contrib.auth import authenticate, login
+from  django.views import generic
+from django.views.generic import View
+from .forms import UserForm
+
+from django.http import HttpResponse
+
 
 def oferta_list(request):
     oferta = Oferta.objects.filter(data_utworzenia__lte=timezone.now()).order_by('data_utworzenia')
@@ -29,5 +34,38 @@ def aplikant_detail(request, pk):
     aplikant = get_object_or_404(Aplikant, pk=pk)
     return render(request, 'projekt/aplikant_detail.html', {'aplikant': aplikant})
 
+def register_success(request):
+    return render(request,'projekt/register_success.html')
 
-# Create your views here.
+
+class User_form_view(View):
+    form_class = UserForm
+    template_name = 'projekt/registration_form.html'
+
+    # display blank form
+    def get(self, request):
+        form = self.form_class(None)
+        return render(request, self.template_name,{'form': form})
+
+    def post(self, request):
+            form = self.form_class(request.POST)
+
+            if form.is_valid():
+
+                user = form.save(commit=False)
+
+                # cleaned (normalized) data
+                username = form.cleaned_data['username']
+                password = form.cleaned_data['password']
+                user.set_password(password)
+                user.save()
+
+                user = authenticate(username=username, password=password)
+
+                if user is not None:
+
+                    if user.is_active:
+                        login(request, user)
+                        return redirect('register_success')
+
+            return render(request, self.template_name, {'form': form})
