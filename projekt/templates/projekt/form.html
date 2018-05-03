@@ -1,0 +1,25 @@
+{% extends 'projekt/base.html' %}
+{% block content %}
+
+<h1>{{title}}</h1>
+<br>
+<h1>Witaj</h1>
+<form method="POST" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+        <div class="register-content">
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% include 'projekt/form-template.html' %}
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-succes">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</form>
+
+
+{% endblock %}

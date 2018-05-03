@@ -1,14 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Firma, Oferta, Aplikant
 from django.utils import timezone
-
-from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login,logout,get_user_model
 from  django.views import generic
 from django.views.generic import View
-from .forms import UserForm
-
+from .forms import UserRegisterForm, UserLoginForm
 from django.http import HttpResponse
-
 
 def oferta_list(request):
     oferta = Oferta.objects.filter(data_utworzenia__lte=timezone.now()).order_by('data_utworzenia')
@@ -38,8 +36,8 @@ def register_success(request):
     return render(request,'projekt/register_success.html')
 
 
-class User_form_view(View):
-    form_class = UserForm
+class Register(View):
+    form_class = UserRegisterForm
     template_name = 'projekt/registration_form.html'
 
     # display blank form
@@ -51,21 +49,39 @@ class User_form_view(View):
             form = self.form_class(request.POST)
 
             if form.is_valid():
-
                 user = form.save(commit=False)
-
                 # cleaned (normalized) data
-                username = form.cleaned_data['username']
-                password = form.cleaned_data['password']
+                username = form.cleaned_data.get('username')
+                password = form.cleaned_data.get('password')
                 user.set_password(password)
                 user.save()
 
                 user = authenticate(username=username, password=password)
 
                 if user is not None:
-
                     if user.is_active:
                         login(request, user)
                         return redirect('register_success')
 
             return render(request, self.template_name, {'form': form})
+
+def login_view(request):
+    print(request.user.is_authenticated())
+    title = "Login"
+    form = UserLoginForm(request.POST or None)
+
+    if  form.is_valid():
+        username = form.cleaned_data.get("username")
+        request.session['name'] = username
+        password = form.cleaned_data.get('password')
+        request.session['password'] = password
+        user = authenticate(username=username, password=password)
+        login(request,user)
+
+        print(request.user.is_authenticated())
+        redirect('login')
+    return render(request, "projekt/form.html",{"form":form, "title":title})
+
+def logout_view(request):
+    logout(request)
+    return render(request, "projekt/form.html",{})
