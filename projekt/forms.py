@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django import forms
 from django.contrib.auth import authenticate, get_user_model, login, logout
+from .models import UserAplication
+from django.core.validators import EmailValidator
 
 class UserRegisterForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
@@ -8,7 +10,6 @@ class UserRegisterForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password']
-
 
 User = get_user_model()
 class UserLoginForm(forms.Form):
@@ -18,7 +19,6 @@ class UserLoginForm(forms.Form):
     def clean(self, *args,**kwargs):
         username = self.cleaned_data.get("username")
         password = self.cleaned_data.get("password")
-
         #user_qs = User.objects.filter(username=username)
         #user = user_qs.first()
 
@@ -32,3 +32,7 @@ class UserLoginForm(forms.Form):
                 raise forms.ValidationError("This user is not longer activate.")
         return super(UserLoginForm,self).clean(*args,**kwargs)
 
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']

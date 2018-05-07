@@ -3,9 +3,8 @@
 
 <h1>{{title}}</h1>
 <br>
-<h1>Witaj</h1>
+<h1>Witaj {{ request.session.name }}</h1>
 <form method="POST" action="" enctype="multipart/form-data">
-    {% csrf_token %}
         <div class="register-content">
         <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
@@ -18,8 +17,6 @@
             </div>
         </form>
     </div>
-
 </form>
-
 
 {% endblock %}

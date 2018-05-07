@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^register/success$', views.register_success, name='register_success'),
     url(r'^login/', views.login_view, name='login'),
     url(r'^logout/', views.logout_view, name='logout'),
+    url(r'^update/(?P<pk>\d+)/$', views.edit_user, name='account_update'),
 ]

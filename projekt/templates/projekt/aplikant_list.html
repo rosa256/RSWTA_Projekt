@@ -1,5 +1,4 @@
 {% extends 'projekt/base.html' %}
-
 {% block content %}
 
     <div class="content_title">Aplikanci</div>
@@ -14,7 +13,14 @@
             <th>Wiek</th>
         </tr>
         {% for a in aplikant %}
-        <tr class="div_hover">
+
+        {% if request.user.is_authenticated %}
+            {% if a.imie == request.session.username %}
+                <tr class="div_hover" style="background-color:#FF8989">
+            {% endif %}
+        {% else %}
+                <tr class="div_hover">
+        {% endif %}
             <td><a href="{% url 'aplikant_detail' pk=a.pk %}">{{ a.imie }}</a> </td>
             <td> {{a.wyksztalcenie }}</td>
             <td> {{a.pochodzenie }}</td>
@@ -24,5 +30,4 @@
     </table>
 
         </div>
-
 {% endblock %}
