@@ -18,7 +18,7 @@
     <div style="clear:both;"></div>
     <div class="page-header">
         {% if request.user.is_authenticated %}
-        <h1>RSWTA-Projekt Witaj {{ request.session.name}}</h1>
+        <h1>RSWTA-Projekt Witaj {{ request.session.username}}</h1>
         {% else %}
         <h1>RSWTA-Projekt Witaj </h1>
         {% endif %}

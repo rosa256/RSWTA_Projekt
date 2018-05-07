@@ -26,9 +26,7 @@ def firma_list(request):
 
 def aplikant_list(request):
     aplikant = UserAplication.objects.all()
-    temp_username=request.session['username']
-
-    return render(request, 'projekt/aplikant_list.html', {'aplikant': aplikant,'temp_username':temp_username})
+    return render(request, 'projekt/aplikant_list.html', {'aplikant': aplikant})
 
 def firma_detail(request, pk):
     firma = get_object_or_404(Firma, pk=pk)
