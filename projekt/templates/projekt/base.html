@@ -30,7 +30,7 @@
         <li><a class="active" href="/">Home</a></li>
           <li><a href="{% url 'firma_list' %}">Firmy</a></li>
           <li><a href="{% url 'oferta_list' %}">Oferty</a></li>
-          <li><a href="{% url 'aplikant_list' %}">Aplikanci</a></li>
+           <li><a href="{% url 'aplikant_list' %}">Aplikanci</a></li>
             {% if not request.user.is_authenticated %}
           <li><a href="{% url 'login'%}">Zaloguj</a></li>
           <li><a href="{% url 'register' %}">Rejestracja</a></li>
@@ -40,11 +40,8 @@
             {% endif %}
         </ul>
     </div>
-    <div class="content">
         {% block content %}
         {% endblock %}
-    </div>
-    {% include 'projekt/filter.html' %}
 
     <div style="clear:both;"></div>
 

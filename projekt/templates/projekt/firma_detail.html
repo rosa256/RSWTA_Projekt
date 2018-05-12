@@ -1,6 +1,7 @@
 {% extends 'projekt/base.html' %}
 
 {% block content %}
+<div class="content">
     <div class="firma_detail">
 
         <h1>{{ firma.nazwa_firmy }}</h1>
@@ -9,4 +10,5 @@
         <p>{{ firma.telefon|linebreaksbr }}</p>
         <p>{{ firma.email|linebreaksbr }}</p>
     </div>
+</div>
 {% endblock %}

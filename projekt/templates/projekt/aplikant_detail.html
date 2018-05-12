@@ -1,6 +1,7 @@
 {% extends 'projekt/base.html' %}
 
 {% block content %}
+<div class="content">
     <div class="aplikant_detail">
 
         <h1>{{ aplikant.imie }}</h1>
@@ -8,4 +9,5 @@
         <p>{{ aplikant.wyksztalcenie|linebreaksbr }}</p>
         <p>{{ aplikant.pochodzenie|linebreaksbr }}</p>
     </div>
+</div>
 {% endblock %}

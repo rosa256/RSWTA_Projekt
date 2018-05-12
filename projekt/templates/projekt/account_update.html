@@ -1,13 +1,13 @@
 {% extends 'projekt/base.html' %}
 {% block content %}
-
-<h3>Profile Page:</h3>Please keep your information current. Thanks!
-    <form action="." method="POST" class="padding">
-    {% csrf_token %} {{ noodle_form.as_p }}
-        <div class="divider"></div>
-    {{ formset.management_form }}
-    {{ formset.as_p }}
-<button type="submit" class="btn-floating btn-large waves-light waves-effect">done</button>
-</form>
-
+<div class="content">
+    <h3>Profile Page:</h3>Please keep your information current. Thanks!
+        <form action="." method="POST" class="padding">
+        {% csrf_token %} {{ noodle_form.as_p }}
+            <div class="divider"></div>
+        {{ formset.management_form }}
+        {{ formset.as_p }}
+    <button type="submit" class="btn-floating btn-large waves-light waves-effect">done</button>
+    </form>
+</div>
 {% endblock %}

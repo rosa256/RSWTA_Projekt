@@ -25,8 +25,62 @@ def firma_list(request):
     return render(request, 'projekt/firma_list.html', {'firma': firma})
 
 def aplikant_list(request):
-    aplikant = UserAplication.objects.all()
-    return render(request, 'projekt/aplikant_list.html', {'aplikant': aplikant})
+    request.session['wiek_filter'] = 1
+    request.session['imie_filter'] = 1
+    request.session['wyksztalcenie_filter'] = 1
+    queryset = UserAplication.objects.all()
+    print(queryset)
+    context ={
+        "queryset":queryset
+    }
+    return render(request, 'projekt/aplikant_list.html', context)
+
+def aplikant_list_filter_wiek(request):
+    #aplikant = UserAplication.objects.all().select_related('user').order_by('wiek') # Filtrowanie wzgledem wieku
+
+    if(request.session['wiek_filter'] == 1):
+        queryset = UserAplication.objects.all().order_by('wiek')
+        request.session['wiek_filter'] = -1
+    else:
+        queryset = UserAplication.objects.all().order_by('-wiek')
+        request.session['wiek_filter'] = 1
+
+    print(queryset)
+    context = {
+        "queryset": queryset
+    }
+    return render(request, 'projekt/filters/aplikant/aplikant_list_filter_imie.html', context)
+
+def aplikant_list_filter_imie(request):
+
+    if (request.session['imie_filter'] == 1):
+        queryset = UserAplication.objects.all().order_by('imie')
+        request.session['imie_filter'] = -1
+    else:
+        queryset = UserAplication.objects.all().order_by('-imie')
+        request.session['imie_filter'] = 1
+
+    print(queryset)
+    context = {
+        "queryset": queryset
+    }
+    return render(request, 'projekt/filters/aplikant/aplikant_list_filter_imie.html', context)
+
+def aplikant_list_filter_wyksztalcenie(request):
+
+    if (request.session['wyksztalcenie_filter'] == 1):
+        queryset = UserAplication.objects.all().order_by('wyksztalcenie')
+        request.session['wyksztalcenie_filter'] = -1
+    else:
+        queryset = UserAplication.objects.all().order_by('-wyksztalcenie')
+        request.session['wyksztalcenie_filter'] = 1
+
+    print(queryset)
+    context = {
+        "queryset": queryset
+    }
+    return render(request, 'projekt/filters/aplikant/aplikant_list_filter_wyksztalcenie.html', context)
+
 
 def firma_detail(request, pk):
     firma = get_object_or_404(Firma, pk=pk)
@@ -38,7 +92,6 @@ def aplikant_detail(request, pk):
 
 def register_success(request):
     return render(request,'projekt/register_success.html')
-
 
 class Register(View):
     template_name = 'projekt/registration_form.html'

@@ -1,6 +1,7 @@
 {% extends 'projekt/base.html' %}
 
 {% block content %}
+<div class="content">
     <div class="oferta_detail">
         {% if oferta.data_utworzenia %}
             <div class="date">
@@ -10,4 +11,5 @@
         <h1>{{ oferta.wakat }}</h1>
         <p>{{ oferta.opis|linebreaksbr }}</p>
     </div>
+</div>
 {% endblock %}
