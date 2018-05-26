@@ -1,9 +1,9 @@
 {% extends 'projekt/base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
 <div class="content">
 <h1>{{title}}</h1>
 <br>
-<h1>Witaj {{ request.session.name }}</h1>
 <form method="POST" action="" enctype="multipart/form-data">
         <div class="register-content">
         <form action="" method="post" enctype="multipart/form-data">

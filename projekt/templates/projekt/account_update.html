@@ -3,7 +3,8 @@
 <div class="content">
     <h3>Profile Page:</h3>Please keep your information current. Thanks!
         <form action="." method="POST" class="padding">
-        {% csrf_token %} {{ noodle_form.as_p }}
+        {% csrf_token %}
+            {{ noodle_form.as_p }}
             <div class="divider"></div>
         {{ formset.management_form }}
         {{ formset.as_p }}

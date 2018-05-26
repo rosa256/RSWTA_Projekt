@@ -1,15 +1,20 @@
 from django.contrib.auth.models import User
 from django import forms
 from django.contrib.auth import authenticate, get_user_model, login, logout
-from .models import UserAplication
+from captcha.fields import CaptchaField
+from .models import Oferta
+
 from django.core.validators import EmailValidator
 
 class UserRegisterForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput)
-
+    password1 = forms.CharField(widget=forms.PasswordInput)
+    password2 = forms.CharField(widget=forms.PasswordInput)
+    captcha = CaptchaField()
+    #checkbox = forms.BooleanField(widget=forms.CheckboxInput,
+    #                              label='Mycheckbox', )
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']
+        fields = ['username', 'password1','password2','email',]
 
 User = get_user_model()
 class UserLoginForm(forms.Form):
@@ -36,3 +41,8 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']
+
+class OfertaForm(forms.ModelForm):
+    class Meta:
+        model = Oferta
+        fields = ['branza','lokalizacja','wakat','wynagrodzenie','opis','data_utworzenia']

@@ -8,6 +8,10 @@
 
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <link rel="stylesheet" href="{% static 'css/projekt.css' %}">
     <link href="https://fonts.googleapis.com/css?family=Jua" rel="stylesheet">
@@ -31,12 +35,17 @@
           <li><a href="{% url 'firma_list' %}">Firmy</a></li>
           <li><a href="{% url 'oferta_list' %}">Oferty</a></li>
            <li><a href="{% url 'aplikant_list' %}">Aplikanci</a></li>
+            <div class="border"></div>
             {% if not request.user.is_authenticated %}
           <li><a href="{% url 'login'%}">Zaloguj</a></li>
           <li><a href="{% url 'register' %}">Rejestracja</a></li>
             {% else %}
           <li><a href="{% url 'logout' %}">Wyloguj</a></li>
           <li><a href="{% url 'account_update' pk=request.session.active_user_pk %}">Ustawienia</a></li>
+                {% if request.session.input == "firma" %}
+                <li><a href="{% url 'add_oferta' %}">Dodaj Oferte</a></li>
+                <li><a href="{% url 'edit_oferts' pk=request.session.active_user_pk %}">Twoje Oferty</a></li>
+                {% endif %}
             {% endif %}
         </ul>
     </div>

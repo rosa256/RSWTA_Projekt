@@ -1,0 +1,24 @@
+{% extends "projekt/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class='row'>
+<div class='col-sm-6 col-sm-offset-3'>
+{% if title %}
+<h1>{{ title }}</h1><br/>
+{% endif %}
+
+<form method='POST' action=''>{% csrf_token %}
+{{ formset.management_form }}
+    {% for form in formset %}
+    <h2>Stanowisko</h2>
+        {{ form|crispy }}
+<input class='btn btn-default' type='submit' value='Submit' />
+        <br/>
+             <hr/>
+        <br/>
+    {% endfor %}
+</form>
+</div>
+</div>
+{% endblock %}

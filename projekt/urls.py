@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from . import views
 
 urlpatterns = [
@@ -20,4 +20,9 @@ urlpatterns = [
     url(r'^login/', views.login_view, name='login'),
     url(r'^logout/', views.logout_view, name='logout'),
     url(r'^update/(?P<pk>\d+)/$', views.edit_user, name='account_update'),
+
+    url(r'^add/oferta/$', views.add_oferta, name='add_oferta'),
+    url(r'^edit/oferts/(?P<pk>\d+)/$', views.edit_oferts, name='edit_oferts'),
+
+    url(r'^captcha/', include('captcha.urls')),
 ]

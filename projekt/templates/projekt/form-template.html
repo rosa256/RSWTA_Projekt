@@ -1,9 +1,13 @@
+{% load crispy_forms_tags %}
 {% for field in form %}
     <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <span class="text-danger small">{{ field.errors }}</span>
+                <span class="text-danger small">{{ field.errors}}</span>
             </div>
-        <label class="control-label col-sm-2">{{ field.label_tag }}</label>
+        <label class="control-label col-sm-2">{{ field.label_tag}}</label>
         <div class="col-sm-10">{{ field }}</div>
     </div>
 {% endfor %}
+    <label><input type="radio" name="inputs" value="aplikant" checked> Aplikant</label>
+    <label><input type="radio" name="inputs" value="firma">Firma</label>
+
