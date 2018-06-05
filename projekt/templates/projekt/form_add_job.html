@@ -8,7 +8,7 @@
 <h1>{{ title }}</h1><br/>
 {% endif %}
 
-<form method='POST' action=''>{% csrf_token %}
+<form method='POST' action='' enctype="multipart/form-data">{% csrf_token %}
 {{ formset.management_form }}
     {% for form in formset %}
     <h2>Stanowisko</h2>

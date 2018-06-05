@@ -1,26 +1,39 @@
 from django.contrib.auth.decorators import login_required
+from django.core.files import File
 from django.forms.models import inlineformset_factory, modelform_factory
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Firma, Oferta, Aplikant
+from os.path import join
+from django.conf import settings
+
+from .models import Firma, Oferta, Aplikant, Aplikacja
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login,logout,get_user_model
 from  django.views import generic
 from django.views.generic import View
-from .forms import UserRegisterForm, UserLoginForm, UserProfileForm, OfertaForm
+from .forms import UserRegisterForm, UserLoginForm, UserProfileForm, OfertaForm,UploadFileForm, CvForm
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.db.models.signals import post_save
+from django.core.files.uploadedfile import SimpleUploadedFile
+
 
 
 
 def oferta_list(request):
     oferta = Oferta.objects.filter(data_utworzenia__lte=timezone.now()).order_by('data_utworzenia')
+    request.session['is_aplikant_cv']=0
+
+    if request.user.is_authenticated():
+        if(request.session['is_aplikant'] and Aplikant.objects.get(user_id=request.session['active_user_pk']).cv ): #User jest zalogowany jako aplikant i ma załadowane CV.
+            print("MA CV")
+            request.session['is_aplikant_cv']=1
     return render(request, 'projekt/oferta_list.html', {'oferta': oferta})
 
 def oferta_detail(request, pk):
     oferta = get_object_or_404(Oferta, pk=pk)
+    request.session['active_oferta_id'] = pk
     return render(request, 'projekt/oferta_detail.html', {'oferta': oferta})
 
 def firma_list(request):
@@ -129,6 +142,8 @@ class Register(View):
                 if user is not None:
                     if user.is_active:
                         login(request, user)
+                        request.session['is_aplikant'] = is_aplikant(request.session['active_user_pk'])
+
                         return redirect('account_update', pk=request.session['active_user_pk'])
             return render(request, self.template_name, {'form': form})
 
@@ -136,10 +151,8 @@ def login_view(request):
     title = "Login"
     form = UserLoginForm(request.POST or None)
 
-
     print("Wartosc:", request.POST.get('inputs'))
     request.session['input'] = request.POST.get('inputs')
-
 
     if  form.is_valid():
         username = form.cleaned_data.get("username")
@@ -149,7 +162,9 @@ def login_view(request):
         #except (KeyError, Aplikant.DoesNotExist):
         #    object = None
         request.session['username'] = username
-        request.session['active_user_pk'] = User.objects.get(username=username).pk
+        request.session['active_user_pk'] = User.objects.get(username=username).pk ## Do Obsłużenia, wartosc null podczas powrotu ze strony admin!
+
+        request.session['is_aplikant'] = is_aplikant(request.session['active_user_pk'])
 
         user = authenticate(username=username, password=password)
         login(request,user)
@@ -197,6 +212,7 @@ def edit_user(request, pk):
                     if formset.is_valid():
                         created_user.save()
                         formset.save()
+                        request.session['is_aplikant'] = is_aplikant(request.session['active_user_pk'])
                         return redirect('/aplikant/')
 
             return render(request, "projekt/account_update.html", {
@@ -241,14 +257,6 @@ def edit_user(request, pk):
         else:
             raise PermissionDenied
 
-#def create_profile(sender, **kwargs):
-#    user = kwargs["instance"]
-#    if kwargs["created"]:
-
-#        user_profile = Aplikant(user=user)
-#        user_profile.save()
-#post_save.connect(create_profile, sender=User)
-
 @login_required
 def add_oferta(request):
     if request.session['input'] == 'firma':
@@ -288,3 +296,46 @@ def edit_oferts(request,pk):
                         formset.save()
 
             return render(request, "projekt/form_add_job.html", {"formset": formset, "title": title})
+
+def upload_cv(request):
+    instance = get_object_or_404(Aplikant, user_id=request.user.id)
+    form = CvForm(request.POST or None,request.FILES or None, instance=instance)
+    if form.is_valid():
+        instance = form.save(commit=False)
+        instance.save()
+        return redirect('register_success')
+    form = CvForm()
+    return render(request, 'projekt/cv-form.html', {
+    'form': form, 'instance':instance
+})
+
+def is_aplikant(user_pk):
+    if Aplikant.objects.filter(user_id=user_pk).count() != 0:
+        return 1
+    else:
+        return 0
+
+def add_aplication(request):
+
+    if(Aplikacja.objects.filter(user_id = request.user.id, oferta_id = request.session['active_oferta_id']).count()==0):
+        user_oferta_owner_id = Oferta.objects.get(id=request.session['active_oferta_id']).user_id
+        print('User_oferta_owner_id:')
+        print(user_oferta_owner_id)
+        Aplikacja.objects.create(user_id = request.user.id,
+                                 oferta_id = request.session['active_oferta_id'],
+                                 user_oferta_owner_id = user_oferta_owner_id)
+    else:
+        print("Juz istnieje")
+
+    return render(request, 'projekt/register_success.html')
+
+def show_aplications(request):
+    title='Złożone CV'
+    instances = []
+    aplikacje = Aplikacja.objects.filter(user_oferta_owner_id = request.user.pk)
+    for a in aplikacje:
+        wakat = Oferta.objects.get(pk=a.oferta_id).wakat
+        instances.append({'cvk':Aplikant.objects.get(user_id = a.user_id),'wakat':wakat})
+    return  render(request, 'projekt/aplications-list.html',{'instances':instances,'title':title})
+
+#DODAĆ SPRAWDZENIE CZY JEST ADMINEM. ZEBY NIE BYLO BLEDU PODCZAS PRZEJSCIA Z PANELU ADMNA DO APLIKACJI.

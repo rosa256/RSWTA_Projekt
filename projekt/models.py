@@ -38,9 +38,16 @@ class Aplikant(models.Model):
     miasto = models.CharField(max_length=100, blank=True,default='')
     panstwo = models.CharField(max_length=100,blank=True,default='')
     opis = models.TextField(blank=True, default='')
-
+    cv = models.FileField()
     def __str__(self):
         return self.user.username
+
+class Aplikacja(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_fk')  # Powiązanie z Userami
+    oferta = models.ForeignKey(Oferta, on_delete=models.CASCADE, related_name='oferta_fk')  # Powiązanie z Userami
+    user_oferta_owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_owner_fk')  # Powiązanie z Userami
+    data_utworzenia = models.DateTimeField(
+            default=timezone.now)
 
 
 

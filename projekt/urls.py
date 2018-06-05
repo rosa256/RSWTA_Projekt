@@ -1,3 +1,5 @@
+from django.conf.urls.static import static
+from django.conf import settings
 from django.conf.urls import url, include
 from . import views
 
@@ -23,6 +25,12 @@ urlpatterns = [
 
     url(r'^add/oferta/$', views.add_oferta, name='add_oferta'),
     url(r'^edit/oferts/(?P<pk>\d+)/$', views.edit_oferts, name='edit_oferts'),
+    url(r'^aplications/$', views.show_aplications, name='show_aplications'),
+
+    url(r'^upload_cv/$', views.upload_cv, name='upload_cv'),
+    url(r'^aplication/$', views.add_aplication,name='add_aplication'),
 
     url(r'^captcha/', include('captcha.urls')),
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

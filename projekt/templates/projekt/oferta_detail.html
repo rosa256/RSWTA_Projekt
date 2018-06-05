@@ -10,6 +10,20 @@
         {% endif %}
         <h1>{{ oferta.wakat }}</h1>
         <p>{{ oferta.opis|linebreaksbr }}</p>
+
+        {% if request.session.is_aplikant_cv %}
+        <div>
+            <a href="{% url 'add_aplication' %}">
+            <button type="submit">Aplikuj</button>
+            </a>
+        </div>
+        {% elif request.session.input == "aplikant" and request.session.is_aplikant == 1%}
+        <div>
+            <a href="{% url 'upload_cv' %}">
+            <button type="submit">Załaduj CV - aby Aplikować</button>
+            </a>
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

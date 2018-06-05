@@ -1,0 +1,25 @@
+{% extends 'projekt/base.html' %}
+{% block content %}
+<div class="content">
+<h1>{{title}}</h1>
+<br>
+<form method="POST" action="" enctype="multipart/form-data">
+        <div class="register-content">
+            {% if instance.cv %}
+            <a href="{{ instance.cv.url }}">Twoje CV</a>
+            {% endif %}
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ instance.cv.name }}
+            {% include 'projekt/form-template.html' %}
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-succes">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</form>
+</div>
+{% endblock %}
