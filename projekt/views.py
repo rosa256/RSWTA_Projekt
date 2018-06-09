@@ -22,14 +22,16 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 def oferta_list(request):
-    oferta = Oferta.objects.filter(data_utworzenia__lte=timezone.now()).order_by('data_utworzenia')
-    request.session['is_aplikant_cv']=0
-
-    if request.user.is_authenticated():
-        if(request.session['is_aplikant'] and Aplikant.objects.get(user_id=request.session['active_user_pk']).cv ): #User jest zalogowany jako aplikant i ma załadowane CV.
-            print("MA CV")
-            request.session['is_aplikant_cv']=1
-    return render(request, 'projekt/oferta_list.html', {'oferta': oferta})
+    request.session['branza_filter'] = 1
+    request.session['wakat_filter']  = 1
+    request.session['lokalizacja_filter'] = 1
+    request.session['wynagrodzenie_filter'] = 1
+    queryset = Oferta.objects.all()
+    print(queryset)
+    context = {
+    "queryset":queryset
+    }
+    return render(request, 'projekt/oferta_list.html',context)
 
 def oferta_detail(request, pk):
     oferta = get_object_or_404(Oferta, pk=pk)
@@ -37,8 +39,14 @@ def oferta_detail(request, pk):
     return render(request, 'projekt/oferta_detail.html', {'oferta': oferta})
 
 def firma_list(request):
-    firma = Firma.objects.all().order_by('nazwa_firmy')
-    return render(request, 'projekt/firma_list.html', {'firma': firma})
+    request.session['nazwa_firmy_filter'] = 1
+    request.session['miasto_filter'] = 1
+    queryset = Firma.objects.all()
+    print(queryset)
+    context={
+    "queryset":queryset
+    }
+    return render(request, 'projekt/firma_list.html',context)
 
 def aplikant_list(request):
     request.session['wiek_filter'] = 1
@@ -101,6 +109,91 @@ def aplikant_list_filter_wyksztalcenie(request):
 def firma_detail(request, pk):
     firma = get_object_or_404(Firma, pk=pk)
     return render(request, 'projekt/firma_detail.html', {'firma': firma})
+
+def firma_list_filter_nazwa_firmy(request):
+    if(request.session['nazwa_firmy_filter'] == 1):
+        queryset = Firma.objects.all().order_by('nazwa_firmy')
+        request.session['nazwa_firmy_filter'] = -1
+    else:
+        queryset=Firma.objects.all().order_by('-nazwa_firmy')
+        request.session['nazwa_firmy_filter']=1
+
+    print(queryset)
+    context = {
+        "queryset":queryset
+    }
+    return render(request, 'projekt/filters/firma/firma_list_filter_nazwa_firmy.html',context)
+
+def firma_list_filter_miasto(request):
+    if(request.session['miasto_filter'] == 1):
+        queryset = Firma.objects.all().order_by('miasto')
+        request.session['miasto_filter'] = -1
+    else:
+        queryset=Firma.objects.all().order_by('-miasto')
+        request.session['miasto_filter']  = 1
+
+    print(queryset)
+    context = {
+        "queryset":queryset
+    }
+    return render(request,'projekt/filters/firma/firma_list_filter_miasto.html',context)
+
+def oferta_list_filter_branza(request):
+    if(request.session['branza_filter'] ==1):
+        queryset = Oferta.objects.all().order_by('branza')
+        request.session['branza_filter'] = -1
+    else:
+        queryset=Oferta.objects.all().order_by('-branza')
+        request.session['branza_filter'] = 1
+
+    print(queryset)
+    context = {
+    'queryset':queryset
+    }
+    return render(request,'projekt/filters/oferta/oferta_list_filter_branza.html',context)
+
+def oferta_list_filter_wakat(request):
+    if(request.session['wakat_filter'] ==1):
+        queryset = Oferta.objects.all().order_by('wakat')
+        request.session['wakat_filter'] = -1
+    else:
+        queryset=Oferta.objects.all().order_by('-wakat')
+        request.session['wakat_filter'] = 1
+
+    print(queryset)
+    context = {
+    'queryset':queryset
+    }
+    return render(request,'projekt/filters/oferta/oferta_list_filter_wakat.html',context)
+
+def oferta_list_filter_lokalizacja(request):
+    if(request.session['lokalizacja_filter'] ==1):
+        queryset = Oferta.objects.all().order_by('lokalizacja')
+        request.session['lokalizacja_filter'] = -1
+    else:
+        queryset=Oferta.objects.all().order_by('-lokalizacja')
+        request.session['lokalizacja_filter'] = 1
+
+    print(queryset)
+    context = {
+    'queryset':queryset
+    }
+    return render(request,'projekt/filters/oferta/oferta_list_filter_lokalizacja.html',context)
+
+def oferta_list_filter_wynagrodzenie(request):
+    if(request.session['wynagrodzenie_filter'] ==1):
+        queryset = Oferta.objects.all().order_by('wynagrodzenie')
+        request.session['wynagrodzenie_filter'] = -1
+    else:
+        queryset=Oferta.objects.all().order_by('-wynagrodzenie')
+        request.session['wynagrodzenie_filter'] = 1
+
+    print(queryset)
+    context = {
+    'queryset':queryset
+    }
+    return render(request,'projekt/filters/oferta/oferta_list_filter_wynagrodzenie.html',context)
+
 
 def aplikant_detail(request, pk):
     aplikant = get_object_or_404(Aplikant, pk=pk)

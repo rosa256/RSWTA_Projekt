@@ -3,27 +3,12 @@
 {% block content %}
 <div class="content">
     <div class="oferta_detail">
-        {% if oferta.data_utworzenia %}
-            <div class="date">
-                {{ oferta.data_utworzenia }}
-            </div>
-        {% endif %}
-        <h1>{{ oferta.wakat }}</h1>
-        <p>{{ oferta.opis|linebreaksbr }}</p>
 
-        {% if request.session.is_aplikant_cv %}
-        <div>
-            <a href="{% url 'add_aplication' %}">
-            <button type="submit">Aplikuj</button>
-            </a>
-        </div>
-        {% elif request.session.input == "aplikant" and request.session.is_aplikant == 1%}
-        <div>
-            <a href="{% url 'upload_cv' %}">
-            <button type="submit">Załaduj CV - aby Aplikować</button>
-            </a>
-        </div>
-        {% endif %}
+        <h1>{{ oferta.branza }}</h1>
+        <p>{{ oferta.wakat|linebreaksbr }}</p>
+        <p>{{ oferta.lokalizacja|linebreaksbr }}</p>
+        <p>{{ oferta.wynagrodzenie|linebreaksbr }}</p>
+        <p>{{ oferta.data_utworzenia|linebreaksbr }}</p>
     </div>
 </div>
 {% endblock %}
