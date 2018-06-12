@@ -20,9 +20,19 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 def oferta_list(request):
-<<<<<<< HEAD
+
     oferta = Oferta.objects.filter(data_utworzenia__lte=timezone.now()).order_by('data_utworzenia')
-    request.session['is_aplikant_cv']=0
+    request.session['is_aplikant_cv'] = 0
+    request.session['branza_filter'] = 1
+    request.session['wakat_filter'] = 1
+    request.session['lokalizacja_filter'] = 1
+    request.session['wynagrodzenie_filter'] = 1
+
+    queryset = Oferta.objects.all()
+    context = {
+    "queryset":queryset,
+    "oferta":oferta
+    }
 
     if request.user.is_superuser:
         logout(request)
@@ -32,19 +42,8 @@ def oferta_list(request):
         if(request.session['is_aplikant'] and Aplikant.objects.get(user_id=request.session['active_user_pk']).cv ): #User jest zalogowany jako aplikant i ma załadowane CV.
             print("MA CV")
             request.session['is_aplikant_cv']=1
-    return render(request, 'projekt/oferta_list.html', {'oferta': oferta})
-=======
-    request.session['branza_filter'] = 1
-    request.session['wakat_filter']  = 1
-    request.session['lokalizacja_filter'] = 1
-    request.session['wynagrodzenie_filter'] = 1
-    queryset = Oferta.objects.all()
-    print(queryset)
-    context = {
-    "queryset":queryset
-    }
-    return render(request, 'projekt/oferta_list.html',context)
->>>>>>> 876495d6e347e1362e1817066522e33b55d789ed
+    return render(request, 'projekt/oferta_list.html', context)
+
 
 def oferta_detail(request, pk):
     oferta = get_object_or_404(Oferta, pk=pk)
@@ -369,7 +368,6 @@ def add_oferta(request):
             instance = form.save(commit=False)
             instance.user = request.user
             instance.save()
-            #return request, "projekt/"
     return render(request, "projekt/form.html", {"form": form, "title": title})
 
 @login_required

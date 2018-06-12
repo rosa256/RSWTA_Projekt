@@ -3,35 +3,38 @@
 {% block content %}
 <div class="content">
 
-    <div class="content_title">Firma</div>
+    <div class="table-content">
 
-        <div class="table-content">
-        <table>
-            <tr>
-                <th>Nazwa Firmy</th>
-                <th>Lokalizacja</th>
-                <th>Ulica</th>
-                <th>Telefon</th>
-            </tr>
-            {% for f in firma %}
+    <table>
+        <tr>
+            <th>Lp.</th>
+            <th>Nazwa Firmy</th>
+            <th>Lokalizacja</th>
+            <th>Ulica</th>
+            <th>Telefon</th>
+        </tr>
+        {% if queryset %}
+            {% for instance in queryset %}
             {% if f.user_id == request.session.active_user_pk and request.session.input == "firma" %}
-            <tr class="div_hover" style="background-color:#FF8989">
-                <td><a href="{% url 'firma_detail' pk=f.pk %}">{{ f.nazwa_firmy }}</a> </td>
-                <td>{{ f.miasto }} </td>
-                <td> {{f.ulica }}</td>
-                <td>{{ f.telefon }}</td>
-            </tr>
+                <tr class="div_hover" style="background-color:#FF8989">
+                    <td> {{forloop.counter }}</td>
+                    <td><a href="{% url 'firma_detail' pk=f.pk %}">{{ instance.nazwa_firmy }}</a> </td>
+                    <td>{{ instance.miasto }} </td>
+                    <td> {{instance.ulica }}</td>
+                    <td>{{ instance.telefon }}</td>
+                </tr>
             {% else %}
-            <tr class="div_hover">
-                <td><a href="{% url 'firma_detail' pk=f.pk %}">{{ f.nazwa_firmy }}</a> </td>
-                <td>{{ f.miasto }} </td>
-                <td> {{f.ulica }}</td>
-                <td>{{ f.telefon }}</td>
-            </tr>
-            {% endif %}
-
+                <tr class="div_hover">
+                    <td> {{forloop.counter }}</td>
+                    <td><a href="{% url 'firma_detail' pk=instance.pk %}">{{ instance.nazwa_firmy }}</a> </td>
+                    <td>{{ instance.miasto }} </td>
+                    <td> {{instance.ulica }}</td>
+                    <td>{{ instance.telefon }}</td>
+                </tr>
+                {% endif %}
             {% endfor %}
         {% endif %}
+
     </table>
 
     </div>
