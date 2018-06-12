@@ -11,7 +11,7 @@
         <h1>{{ oferta.wakat }}</h1>
         <p>{{ oferta.opis|linebreaksbr }}</p>
 
-        {% if request.session.is_aplikant_cv %}
+        {% if request.session.is_aplikant_cv and request.session.input == "aplikant" %}
         <div>
             <a href="{% url 'add_aplication' %}">
             <button type="submit">Aplikuj</button>

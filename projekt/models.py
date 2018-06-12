@@ -22,7 +22,7 @@ class Oferta(models.Model):
     lokalizacja = models.CharField(max_length=100)
     wakat = models.CharField(max_length=100)
     wynagrodzenie = models.FloatField(default=0)
-    opis = models.CharField(max_length=1000, blank=True)
+    opis = models.TextField(max_length=1000, blank=True)
     data_utworzenia = models.DateTimeField(
             default=timezone.now)
 

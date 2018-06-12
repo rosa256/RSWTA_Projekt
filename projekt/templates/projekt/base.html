@@ -15,16 +15,17 @@
     <link href="https://fonts.googleapis.com/css?family=Jua" rel="stylesheet">
 
 
-</script>
-<body>
 
+<body>
 <div id="container">
     <div style="clear:both;"></div>
     <div class="page-header">
-        {% if request.user.is_authenticated %}
-        <h1>RSWTA-Projekt Witaj {{ request.session.username}}</h1>
+        {% if request.user.is_authenticated and request.session.input == 'aplikant'%}
+        <h1>RSWTA-Projekt Witaj {{ request.session.username }} - 'Aplikant'</h1>
+        {% elif request.user.is_authenticated and request.session.input == 'firma'%}
+        <h1>RSWTA-Projekt Witaj {{ request.session.username }} - 'Firma'</h1>
         {% else %}
-        <h1>RSWTA-Projekt Witaj </h1>
+        <h1>RSWTA-Projekt</h1>
         {% endif %}
     </div>
     <div style="float:left;"></div>

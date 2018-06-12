@@ -6,9 +6,7 @@
         <div class="content_title">
         </div>
 
-
         <div class="table-content">
-
         <table>
             <tr>
                 <th>Nazwa Firmy</th>
@@ -17,12 +15,21 @@
                 <th>Telefon</th>
             </tr>
             {% for f in firma %}
+            {% if f.user_id == request.session.active_user_pk and request.session.input == "firma" %}
+            <tr class="div_hover" style="background-color:#FF8989">
+                <td><a href="{% url 'firma_detail' pk=f.pk %}">{{ f.nazwa_firmy }}</a> </td>
+                <td>{{ f.miasto }} </td>
+                <td> {{f.ulica }}</td>
+                <td>{{ f.telefon }}</td>
+            </tr>
+            {% else %}
             <tr class="div_hover">
                 <td><a href="{% url 'firma_detail' pk=f.pk %}">{{ f.nazwa_firmy }}</a> </td>
                 <td>{{ f.miasto }} </td>
                 <td> {{f.ulica }}</td>
                 <td>{{ f.telefon }}</td>
             </tr>
+            {% endif %}
             {% endfor %}
         </table>
 

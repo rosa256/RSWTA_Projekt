@@ -192,3 +192,7 @@ p{
 border: 1px solid #73AD21;
 }
 
+p.thick{
+    font-weight: bold;
+}
+

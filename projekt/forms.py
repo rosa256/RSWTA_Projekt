@@ -33,6 +33,11 @@ class CvForm(forms.ModelForm):
         model = Aplikant
         fields = ('cv',)
 
+class AplikantForm(forms.ModelForm):
+    class Meta:
+        model = Aplikant
+        fields = ('imie','wiek','wyksztalcenie','telefon','miasto','panstwo','opis')
+
 User = get_user_model()
 class UserLoginForm(forms.Form):
     username = forms.CharField()

@@ -12,18 +12,20 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login,logout,get_user_model
 from  django.views import generic
 from django.views.generic import View
-from .forms import UserRegisterForm, UserLoginForm, UserProfileForm, OfertaForm,UploadFileForm, CvForm
+from .forms import UserRegisterForm, UserLoginForm, UserProfileForm, OfertaForm,UploadFileForm, CvForm, AplikantForm
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.db.models.signals import post_save
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 
-
-
 def oferta_list(request):
     oferta = Oferta.objects.filter(data_utworzenia__lte=timezone.now()).order_by('data_utworzenia')
     request.session['is_aplikant_cv']=0
+
+    if request.user.is_superuser:
+        logout(request)
+        return render(request, 'projekt/form.html', {})
 
     if request.user.is_authenticated():
         if(request.session['is_aplikant'] and Aplikant.objects.get(user_id=request.session['active_user_pk']).cv ): #User jest zalogowany jako aplikant i ma załadowane CV.
@@ -45,14 +47,12 @@ def aplikant_list(request):
     request.session['imie_filter'] = 1
     request.session['wyksztalcenie_filter'] = 1
     queryset = Aplikant.objects.all()
-    print(queryset)
     context ={
-        "queryset":queryset
+        "queryset":queryset,
     }
     return render(request, 'projekt/aplikant_list.html', context)
 
 def aplikant_list_filter_wiek(request):
-    #aplikant = Aplikant.objects.all().select_related('user').order_by('wiek') # Filtrowanie wzgledem wieku
 
     if(request.session['wiek_filter'] == 1):
         queryset = Aplikant.objects.all().order_by('wiek')
@@ -110,7 +110,7 @@ def register_success(request):
     return render(request,'projekt/register_success.html')
 
 class Register(View):
-    template_name = 'projekt/registration_form.html'
+    template_name = 'projekt/form-login-register.html'
 
 
     # display blank form
@@ -149,6 +149,7 @@ class Register(View):
 
 def login_view(request):
     title = "Login"
+
     form = UserLoginForm(request.POST or None)
 
     print("Wartosc:", request.POST.get('inputs'))
@@ -169,11 +170,11 @@ def login_view(request):
         user = authenticate(username=username, password=password)
         login(request,user)
         return redirect("account_update", pk=request.session['active_user_pk'])
-    return render(request, "projekt/form.html",{"form":form, "title":title})
+    return render(request, "projekt/form-login-register.html",{"form":form, "title":title})
 
 def logout_view(request):
     logout(request)
-    return render(request, "projekt/form.html",{})
+    return render(request, "projekt/logout.html",{})
 
 
 def settings(request):
@@ -195,9 +196,7 @@ def edit_user(request, pk):
 
         # The sorcery begins from here, see explanation below
 
-        ProfileInlineFormset = inlineformset_factory(User, Aplikant,
-                                                     fields=('imie','wiek','wyksztalcenie','telefon','miasto',
-                                                             'panstwo','opis'), max_num=1,extra=1)
+        ProfileInlineFormset = inlineformset_factory(User,Aplikant,form=AplikantForm,extra=0)
         formset = ProfileInlineFormset(instance=user)
 
         if request.user.is_authenticated() and request.user.id == user.id:
@@ -272,13 +271,12 @@ def add_oferta(request):
 @login_required
 def edit_oferts(request,pk):
     if request.session['input'] == 'firma':
+
         title = "Twoje Oferty"
         user = User.objects.get(pk=pk)
-        print (user)
         user_form = UserProfileForm(instance=user)
 
         OfertaInlineFormset = inlineformset_factory(User,Oferta,form=OfertaForm,extra=0)
-        #OfertaFormset = modelform_factory(Oferta,form=OfertaForm)
 
         formset = OfertaInlineFormset(instance=user)
 
@@ -305,9 +303,7 @@ def upload_cv(request):
         instance.save()
         return redirect('register_success')
     form = CvForm()
-    return render(request, 'projekt/cv-form.html', {
-    'form': form, 'instance':instance
-})
+    return render(request, 'projekt/cv-form.html', {'form': form, 'instance':instance} )
 
 def is_aplikant(user_pk):
     if Aplikant.objects.filter(user_id=user_pk).count() != 0:
@@ -319,13 +315,11 @@ def add_aplication(request):
 
     if(Aplikacja.objects.filter(user_id = request.user.id, oferta_id = request.session['active_oferta_id']).count()==0):
         user_oferta_owner_id = Oferta.objects.get(id=request.session['active_oferta_id']).user_id
-        print('User_oferta_owner_id:')
-        print(user_oferta_owner_id)
         Aplikacja.objects.create(user_id = request.user.id,
                                  oferta_id = request.session['active_oferta_id'],
                                  user_oferta_owner_id = user_oferta_owner_id)
     else:
-        print("Juz istnieje")
+        print("Juz istnieje taka aplikacja")
 
     return render(request, 'projekt/register_success.html')
 
@@ -338,4 +332,8 @@ def show_aplications(request):
         instances.append({'cvk':Aplikant.objects.get(user_id = a.user_id),'wakat':wakat})
     return  render(request, 'projekt/aplications-list.html',{'instances':instances,'title':title})
 
-#DODAĆ SPRAWDZENIE CZY JEST ADMINEM. ZEBY NIE BYLO BLEDU PODCZAS PRZEJSCIA Z PANELU ADMNA DO APLIKACJI.
+def accept_aplication(request):
+
+    return  render(request, 'projekt/aplications-list.html',{})
+
+#DODAĆ SPRAWDZENIE CZY JEST ADMINEM. ZEBY NIE BYLO BLEDU PODCZAS PRZEJSCIA Z PANELU ADMNA DO APLIKACJI. - JUż zrobione.
