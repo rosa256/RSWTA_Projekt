@@ -3,8 +3,7 @@
 {% block content %}
 <div class="content">
 
-        <div class="content_title">
-        </div>
+    <div class="content_title">Firma</div>
 
         <div class="table-content">
         <table>
@@ -30,13 +29,17 @@
                 <td>{{ f.telefon }}</td>
             </tr>
             {% endif %}
-            {% endfor %}
-        </table>
 
-        </div>
+            {% endfor %}
+        {% endif %}
+    </table>
+
+    </div>
 </div>
+
 <div id="right-bar">
-    <div class="filtr" >Filtrowanie</div>
-    Pusto xD
+    <div class="filtr">Filtrowanie</div>
+    <li><a href="{% url 'firma_list_filter_nazwa_firmy' %}">Nazwa Firmy</a></li>
+    <li><a href="{% url 'firma_list_filter_miasto' %}">Miasto</a></li>
 </div>
 {% endblock %}

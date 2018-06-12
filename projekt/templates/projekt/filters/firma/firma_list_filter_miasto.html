@@ -1,0 +1,48 @@
+{% extends 'projekt/base.html' %}
+
+{% block content %}
+<div class="content">
+
+    <div class="content_title">Firma</div>
+
+    <div class="table-content">
+
+    <table>
+        <tr>
+            <th>Lp.</th>
+            <th>Nazwa Firmy</th>
+            <th>Lokalizacja</th>
+            <th>Ulica</th>
+            <th>Telefon</th>
+        </tr>
+        {% if queryset %}
+            {% for instance in queryset %}
+                {% if instance.nazwa_firmy  == request.session.username %}
+                <tr class="div_hover" style="background-color:#FF8989">
+                    <td> {{forloop.counter }}</td>
+                    <td><a href="{% url 'firma_detail' pk=f.pk %}">{{ instance.nazwa_firmy }}</a> </td>
+                    <td>{{ instance.miasto }} </td>
+                    <td> {{instance.ulica }}</td>
+                    <td>{{ instance.telefon }}</td>
+                </tr>
+            {% else %}
+                <tr class="div_hover">
+                    <td> {{forloop.counter }}</td>
+                    <td><a href="{% url 'firma_detail' pk=instance.pk %}">{{ instance.nazwa_firmy }}</a> </td>
+                    <td>{{ instance.miasto }} </td>
+                    <td> {{instance.ulica }}</td>
+                    <td>{{ instance.telefon }}</td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </table>
+    </div>
+</div>
+
+<div id="right-bar">
+    <div class="filtr">Filtrowanie</div>
+    <li><a href="{% url 'firma_list_filter_nazwa_firmy' %}">Nazwa Firmy</a></li>
+    <li><a href="{% url 'firma_list_filter_miasto' %}">Miasto</a></li>
+</div>
+{% endblock %}

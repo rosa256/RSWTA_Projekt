@@ -1,10 +1,12 @@
 {% extends 'projekt/base.html' %}
+
+
 {% block content %}
 <div class="content">
 
-    <div class="content_title">Oferty</div>
+        <div class="content_title">Oferty</div>
 
-    <div class="table-content">
+        <div class="table-content">
 
     <table>
         <tr>
@@ -21,7 +23,7 @@
                 <tr class="div_hover" style="background-color:#FF8989">
                     <td> {{forloop.counter }}</td>
                     <td><a href="{% url 'oferta_detail' pk=instance.pk %}">{{ instance.branza }}</a> </td>
-                    <td>{{ instance.wakat }} </td>
+                    <td>{{ instance.branza }} </td>
                     <td>{{ instance.lokalizacja }} </td>
                     <td> {{instance.wynagrodzenie }}</td>
                     <td>{{ instance.data_utworzenia.date }}</td>
@@ -48,5 +50,6 @@
     <li><a href="{% url 'oferta_list_filter_wakat' %}">Wakat</a></li>
     <li><a href="{% url 'oferta_list_filter_lokalizacja' %}">Lokalizacja</a></li>
     <li><a href="{% url 'oferta_list_filter_wynagrodzenie' %}">Wynagrodzenie</a></li>
+
 </div>
 {% endblock %}
