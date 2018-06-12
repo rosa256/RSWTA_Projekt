@@ -18,7 +18,7 @@
                 <tr class="div_hover" style="background-color:#FF8989">
                      <td> {{forloop.counter }}</td>
                      <td><a href="{% url 'aplikant_detail' pk=instance.pk %}">{{ instance.imie }}</a> </td>
-                     <td> {{instance.wyksztalcenie }}</td>
+                     <td> {{instance.miasto }}</td>
                      <td> {{instance.pochodzenie }}</td>
                      <td>{{ instance.wiek }} </td>
                 </tr>
@@ -27,7 +27,7 @@
                     <td> {{forloop.counter }}</td>
                     <td><a href="{% url 'aplikant_detail' pk=instance.pk %}">{{ instance.imie }}</a> </td>
                     <td> {{instance.wyksztalcenie }}</td>
-                    <td> {{instance.pochodzenie }}</td>
+                    <td> {{instance.miasto }}</td>
                     <td>{{ instance.wiek }} </td>
                 </tr>
                 {% endif %}
