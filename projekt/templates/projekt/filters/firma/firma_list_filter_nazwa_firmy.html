@@ -3,9 +3,6 @@
 {% block content %}
 <div class="content">
 
-        <div class="content_title">Firma</div>
-
-
         <div class="table-content">
 
         <table>
@@ -18,10 +15,10 @@
             </tr>
             {% if queryset %}
                     {% for instance in queryset %}
-                        {% if instance.nazwa_firmy  == request.session.username %}
+            {% if instance.user_id == request.session.active_user_pk and request.session.input == "firma"%}
                         <tr class="div_hover" style="background-color:#FF8989">
                             <td> {{forloop.counter }}</td>
-                            <td><a href="{% url 'firma_detail' pk=f.pk %}">{{ instance.nazwa_firmy }}</a> </td>
+                            <td><a href="{% url 'firma_detail' pk=instance.pk %}">{{ instance.nazwa_firmy }}</a> </td>
                             <td>{{ instance.miasto }} </td>
                             <td> {{instance.ulica }}</td>
                             <td>{{ instance.telefon }}</td>

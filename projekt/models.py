@@ -49,7 +49,8 @@ class Aplikacja(models.Model):
     data_utworzenia = models.DateTimeField(
             default=timezone.now)
 
-
+#class
+#    pass ZROBIC NOWA KLASE
 
 '''
 class Odpowiedz_Na_Aplikacje(models.Model):
