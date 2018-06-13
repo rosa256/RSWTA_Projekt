@@ -4,4 +4,5 @@
 .DB_Store
 db.sqlite3*
 *myvenv
+media*
 __pycache__

@@ -212,6 +212,9 @@ def aplikant_detail(request, pk):
 def register_success(request):
     return render(request,'projekt/register_success.html')
 
+def upload_success(request):
+    return render(request,'projekt/upload_success.html')
+
 class Register(View):
     template_name = 'projekt/form-login-register.html'
 
@@ -299,7 +302,9 @@ def edit_user(request, pk):
 
         # The sorcery begins from here, see explanation below
 
-        ProfileInlineFormset = inlineformset_factory(User,Aplikant,form=AplikantForm,extra=0)
+        ProfileInlineFormset = inlineformset_factory(User, Aplikant,
+                                                     fields=('imie','wiek','wyksztalcenie','telefon','miasto',
+                                                             'panstwo','opis'), max_num=1,extra=1)
         formset = ProfileInlineFormset(instance=user)
 
         if request.user.is_authenticated() and request.user.id == user.id:
@@ -403,7 +408,7 @@ def upload_cv(request):
     if form.is_valid():
         instance = form.save(commit=False)
         instance.save()
-        return redirect('register_success')
+        return redirect('upload_success')
     form = CvForm()
     return render(request, 'projekt/cv-form.html', {'form': form, 'instance':instance} )
 
