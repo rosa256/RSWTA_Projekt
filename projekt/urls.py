@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^register/$', views.Register.as_view(), name='register'),
     url(r'^register/success$', views.register_success, name='register_success'),
     url(r'^upload/success$', views.upload_success, name='upload_success'),
+    url(r'^aplication/success$', views.aplication_success, name='aplication_success'),
     url(r'^login/', views.login_view, name='login'),
     url(r'^logout/', views.logout_view, name='logout'),
     url(r'^update/(?P<pk>\d+)/$', views.edit_user, name='account_update'),

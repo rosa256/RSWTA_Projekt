@@ -1,23 +1,14 @@
-from django.contrib.auth.decorators import login_required
-from django.core.files import File
-from django.forms.models import inlineformset_factory, modelform_factory
+from django.forms.models import inlineformset_factory
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import render, get_object_or_404, redirect
-from os.path import join
-from django.conf import settings
-
+from django.shortcuts import get_object_or_404, redirect
 from .models import Firma, Oferta, Aplikant, Aplikacja
 from django.utils import timezone
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login,logout,get_user_model
-from  django.views import generic
+from django.contrib.auth import authenticate, login,logout
 from django.views.generic import View
-from .forms import UserRegisterForm, UserLoginForm, UserProfileForm, OfertaForm,UploadFileForm, CvForm, AplikantForm
-from django.shortcuts import render, HttpResponseRedirect
+from .forms import UserRegisterForm, UserLoginForm, UserProfileForm, OfertaForm, CvForm
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.db.models.signals import post_save
-from django.core.files.uploadedfile import SimpleUploadedFile
-
 
 def oferta_list(request):
 
@@ -215,11 +206,13 @@ def register_success(request):
 def upload_success(request):
     return render(request,'projekt/upload_success.html')
 
+def aplication_success(request):
+    return render(request,'projekt/aplication_success.html')
+
 class Register(View):
     template_name = 'projekt/form-login-register.html'
 
 
-    # display blank form
     def get(self, request):
         form = UserRegisterForm(None)
         return render(request, self.template_name,{'form': form})
@@ -230,7 +223,6 @@ class Register(View):
             print("Wartosc:", request.POST.get('inputs'))
             request.session['input'] = request.POST.get('inputs')
 
-            ##Zrobic walidację adresow email
             if form.is_valid():
                 user = form.save(commit=False)
                 username = form.cleaned_data.get('username')
@@ -264,10 +256,6 @@ def login_view(request):
     if  form.is_valid():
         username = form.cleaned_data.get("username")
         password = form.cleaned_data.get('password')
-        #try:
-        #    object = Aplikant.objects.get(id=request.session['object_id'])
-        #except (KeyError, Aplikant.DoesNotExist):
-        #    object = None
         request.session['username'] = username
         request.session['active_user_pk'] = User.objects.get(username=username).pk ## Do Obsłużenia, wartosc null podczas powrotu ze strony admin!
 
@@ -291,16 +279,12 @@ def settings(request):
     return render(request, 'projekt/settings.html', {'object':object})
 
 
-@login_required()  # only logged in users should access this
+@login_required()
 def edit_user(request, pk):
-    # querying the User object with pk from url
     if request.session['input'] == 'aplikant':
         user = User.objects.get(pk=pk)
 
-        # prepopulate UserProfileForm with retrieved user values from above.
         user_form = UserProfileForm(instance=user)
-
-        # The sorcery begins from here, see explanation below
 
         ProfileInlineFormset = inlineformset_factory(User, Aplikant,
                                                      fields=('imie','wiek','wyksztalcenie','telefon','miasto',
@@ -323,7 +307,6 @@ def edit_user(request, pk):
                         return redirect('/aplikant/')
 
             return render(request, "projekt/account_update.html", {
-                "noodle": pk,
                 "noodle_form": user_form,
                 "formset": formset,
             })
@@ -332,10 +315,7 @@ def edit_user(request, pk):
     else:
         user = User.objects.get(pk=pk)
 
-        # prepopulate UserProfileForm with retrieved user values from above.
         user_form = UserProfileForm(instance=user)
-
-        # The sorcery begins from here, see explanation below
 
         ProfileInlineFormset = inlineformset_factory(User, Firma,
                                                      fields=('nazwa_firmy', 'miasto', 'ulica', 'telefon', 'email'
@@ -357,7 +337,6 @@ def edit_user(request, pk):
                         return redirect('/firma/')
 
             return render(request, "projekt/account_update.html", {
-                "noodle": pk,
                 "noodle_form": user_form,
                 "formset": formset,
             })
@@ -373,6 +352,8 @@ def add_oferta(request):
             instance = form.save(commit=False)
             instance.user = request.user
             instance.save()
+            return redirect('edit_oferts',request.session['active_user_pk'])
+
     return render(request, "projekt/form.html", {"form": form, "title": title})
 
 @login_required
@@ -428,7 +409,7 @@ def add_aplication(request):
     else:
         print("Juz istnieje taka aplikacja")
 
-    return render(request, 'projekt/register_success.html')
+    return render(request, 'projekt/aplication_success.html')
 
 def show_aplications(request):
     title='Złożone CV'
@@ -436,11 +417,14 @@ def show_aplications(request):
     aplikacje = Aplikacja.objects.filter(user_oferta_owner_id = request.user.pk)
     for a in aplikacje:
         wakat = Oferta.objects.get(pk=a.oferta_id).wakat
-        instances.append({'cvk':Aplikant.objects.get(user_id = a.user_id),'wakat':wakat})
+
+        instances.append(
+            {'cvk':Aplikant.objects.get(user_id = a.user_id),
+             'wakat':wakat
+             })
+
     return  render(request, 'projekt/aplications-list.html',{'instances':instances,'title':title})
 
 def accept_aplication(request):
 
     return  render(request, 'projekt/aplications-list.html',{})
-
-#DODAĆ SPRAWDZENIE CZY JEST ADMINEM. ZEBY NIE BYLO BLEDU PODCZAS PRZEJSCIA Z PANELU ADMNA DO APLIKACJI. - JUż zrobione.
