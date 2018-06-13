@@ -5,13 +5,15 @@
 <br>
         <div class="register-content">
             {% for instance in instances %}
-            <h3><div style="float:left;margin-left:50px">{{ instance.wakat }}</div></h3>
+
+            <h4><div style="float:left;margin-left:10px">{{ instance.wakat }}</div></h4>
                 {% if instance.cvk.cv %}
-               <h3><a href="{{ instance.cvk.cv.url }}">CV:
+               <div ><h4 ><a href="{{ instance.cvk.cv.url }}">
                 {% endif %}
                 {% csrf_token %}
                 {{ instance.cvk.cv.name }}
-               </a></h3>
+               </a></h4>
+                </div>
             {% endfor %}
         </div>
     <div style="clear:both"></div>

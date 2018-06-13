@@ -4,11 +4,28 @@
 <div class="content">
     <div class="oferta_detail">
 
+
+
+
         <h1>{{ oferta.branza }}</h1>
         <p>{{ oferta.wakat|linebreaksbr }}</p>
         <p>{{ oferta.lokalizacja|linebreaksbr }}</p>
         <p>{{ oferta.wynagrodzenie|linebreaksbr }}</p>
         <p>{{ oferta.data_utworzenia|linebreaksbr }}</p>
+
+        {% if request.session.is_aplikant_cv and request.session.input == "aplikant" %}
+        <div>
+            <a href="{% url 'add_aplication' %}">
+            <button type="submit">Aplikuj</button>
+            </a>
+        </div>
+        {% elif request.session.input == "aplikant" and request.session.is_aplikant == 1%}
+        <div>
+            <a href="{% url 'upload_cv' %}">
+            <button type="submit">Załaduj CV - aby Aplikować</button>
+            </a>
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

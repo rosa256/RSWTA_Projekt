@@ -2,8 +2,6 @@
 {% block content %}
 <div class="content">
 
-    <div class="content_title">Aplikanci</div>
-
     <div class="table-content">
 
     <table>
@@ -16,12 +14,12 @@
         </tr>
         {% if queryset %}
             {% for instance in queryset %}
-                {% if instance.imie == request.session.username %}
+                {% if instance.user_id == request.session.active_user_pk and request.session.input == "aplikant" %}
                 <tr class="div_hover" style="background-color:#FF8989">
                      <td> {{forloop.counter }}</td>
                      <td><a href="{% url 'aplikant_detail' pk=instance.pk %}">{{ instance.imie }}</a> </td>
                      <td> {{instance.wyksztalcenie }}</td>
-                     <td> {{instance.pochodzenie }}</td>
+                     <td> {{instance.miasto }}</td>
                      <td>{{ instance.wiek }} </td>
                 </tr>
             {% else %}
@@ -29,7 +27,7 @@
                     <td> {{forloop.counter }}</td>
                     <td><a href="{% url 'aplikant_detail' pk=instance.pk %}">{{ instance.imie }}</a> </td>
                     <td> {{instance.wyksztalcenie }}</td>
-                    <td> {{instance.pochodzenie }}</td>
+                    <td> {{instance.miasto }}</td>
                     <td>{{ instance.wiek }} </td>
                 </tr>
                 {% endif %}
